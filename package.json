@@ -32,5 +32,8 @@
     "rimraf": "^2.6.3",
     "webpack": "^4.36.1",
     "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "ramda": "^0.26.1"
   }
 }
