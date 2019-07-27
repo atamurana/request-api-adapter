@@ -1,61 +1,25 @@
-import {
-  always,
-  identity,
-  mapObjIndexed,
-  mergeDeepRight,
-  mergeRight,
-  otherwise,
-  pipe,
-  reduce,
-  then,
-  when,
-} from 'ramda';
+import { identity, mapObjIndexed, then, mergeDeepRight, otherwise, pipe, when, always } from 'ramda';
 
-function applyer(state, request) {
-  const newState = request(state);
-  return mergeRight(state, newState);
-}
+const compose = pipe;
 
-function applyerDeep(state, request) {
-  const newState = request(state);
-  return mergeDeepRight(state, newState);
-}
-
-function compose(...requests) {
-  return (state) => reduce(applyer, state, requests);
-}
-
-function composeDeep(...requests) {
-  return (state) => reduce(applyerDeep, state, requests);
-}
-
-function applyState(client, resolve, reject) {
-  return (request) =>
-    // eslint-disable-next-line
-    pipe(
+function applyConfig(client, baseConfig, resolve, reject) {
+  function applier(request) {
+    return pipe(
+      mergeDeepRight(baseConfig),
       request,
       client,
       when(always(resolve), then(resolve)),
       when(always(reject), otherwise(reject)),
-    );
+    )(request);
+  }
+
+  return applier;
 }
 
-function mergeWithBase(baseState) {
-  return (request) => (state) => mergeDeepRight(baseState, request(state));
-}
+function createAdapter(client, baseConfig = {}, requests = {}, resolve, reject) {
+  const applies = mapObjIndexed(applyConfig(client, baseConfig, resolve, reject), requests);
 
-function createAdapter(client, baseState = {}, requests = {}, resolve = identity, reject = identity) {
-  const baseRequest = mergeDeepRight(baseState);
-
-  const applies = mapObjIndexed(
-    pipe(
-      mergeWithBase(baseState),
-      applyState(client, resolve, reject),
-    ),
-    requests,
-  );
-
-  const request = applyState(client, resolve, reject)(baseRequest);
+  const request = applyConfig(client, baseConfig, resolve, reject)(identity);
 
   return {
     request,
@@ -63,4 +27,4 @@ function createAdapter(client, baseState = {}, requests = {}, resolve = identity
   };
 }
 
-export { createAdapter, compose, composeDeep };
+export { createAdapter, compose };
