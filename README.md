@@ -30,6 +30,10 @@ const apiAdapter = createAdapter(
   successHandler,
   errorHandler,
 );
+
+// ...
+
+apiAdapter.someRequest(config).then(requestHandler);
 ```
 
 ## Compose requests
