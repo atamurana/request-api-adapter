@@ -9,5 +9,6 @@
 .wafpickle-*
 config.gypi
 src
+examples
 CVS
 npm-debug.log

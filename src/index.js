@@ -1,16 +1,26 @@
-import { identity, mapObjIndexed, then, mergeDeepRight, otherwise, pipe, when, always } from 'ramda';
+import { identity, mapObjIndexed, mergeDeepRight, pipe } from 'ramda';
 
 const compose = pipe;
 
 function applyConfig(client, baseConfig, resolve, reject) {
   function applier(request) {
-    return pipe(
-      mergeDeepRight(baseConfig),
-      request,
-      client,
-      when(always(resolve), then(resolve)),
-      when(always(reject), otherwise(reject)),
-    )(request);
+    return (state) => {
+      const config = pipe(mergeDeepRight(baseConfig), request)(state);
+
+      if (resolve && reject) {
+        return client(config).then(resolve, reject);
+      }
+
+      if (reject) {
+        return client(config).catch(reject);
+      }
+
+      if (resolve) {
+        return client(config).then(resolve);
+      }
+
+      return client(config);
+    };
   }
 
   return applier;
