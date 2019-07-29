@@ -54,3 +54,8 @@ function complicatedRequest(config) {
 ##### createAdapter(client[, baseConfig[, request[, successHandler[, errorHandler]]]])
 ##### compose(request[, request[, ...]])
 
+## Credits
+
+Sponsored by [JetRockets](http://www.jetrockets.pro).
+
+![JetRockets](http://jetrockets.pro/jetrockets-white.png)
