@@ -5,7 +5,7 @@ const compose = pipe;
 function applyConfig(client, baseConfig, resolve, reject) {
   function applier(request) {
     return (state) => {
-      const config = pipe(mergeDeepRight(baseConfig), request)(state);
+      const config = pipe(request, mergeDeepRight(baseConfig))(state);
 
       if (resolve && reject) {
         return client(config).then(resolve, reject);

@@ -1,4 +1,4 @@
-import { createAdapter } from './index';
+import { createAdapter } from '../src/index';
 
 describe('createAdapter', () => {
   it('createAdapter should be defined', () => {
