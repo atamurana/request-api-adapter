@@ -4,8 +4,8 @@ const compose = pipe;
 
 function applyConfig(client, baseConfig, resolve, reject) {
   function applier(request) {
-    return (state) => {
-      const config = pipe(request, mergeDeepRight(baseConfig))(state);
+    return (...args) => {
+      const config = pipe(request, mergeDeepRight(baseConfig))(...args);
 
       if (resolve && reject) {
         return client(config).then(resolve, reject);

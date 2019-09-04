@@ -1,6 +1,6 @@
 {
   "name": "request-api-adapter",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Simple request api adapter for promise based HTTP clients",
   "main": "lib/index.js",
   "homepage": "https://github.com/atamurana/request-api-adapter",
